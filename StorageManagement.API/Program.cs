@@ -1,9 +1,14 @@
 using Domain.Entities;
 using Domain.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Persistence;
 using Persistence.Repositories;
+using Services;
+using Services.Abstractions;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +30,8 @@ void ConfigureServices(IServiceCollection services)
     services.AddSwaggerGen();
 
     services.AddScoped<IRepositoryManager, RepositoryManager>();
-    //services.AddScoped<IServiceManager, ServiceManager>();
-    //services.AddScoped<ITokenService, TokenService>();
+    services.AddScoped<IServiceManager, ServiceManager>();
+    services.AddScoped<ITokenService, TokenService>();
 
     services.AddIdentity<Account, AccountRole>(opt =>
     {
@@ -50,25 +55,25 @@ void ConfigureDatabase(IServiceCollection services, IConfiguration configuration
 
 void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration configuration)
 {
-    //var jwtSettings = configuration.GetSection("JwtSettings");
+    var jwtSettings = configuration.GetSection("JwtSettings");
 
-    //services.AddAuthentication(opt =>
-    //{
-    //    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    //    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    //}).AddJwtBearer(options =>
-    //{
-    //    options.TokenValidationParameters = new TokenValidationParameters
-    //    {
-    //        ValidateIssuer = false,
-    //        ValidateAudience = false,
-    //        ValidateLifetime = true,
-    //        ValidateIssuerSigningKey = true,
-    //        ValidIssuer = jwtSettings["validIssuer"],
-    //        ValidAudience = jwtSettings["validAudience"],
-    //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["securityKey"]))
-    //    };
-    //});
+    services.AddAuthentication(opt =>
+    {
+        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["validIssuer"],
+            ValidAudience = jwtSettings["validAudience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["securityKey"]))
+        };
+    });
 }
 
 void ConfigureCors(IServiceCollection services)

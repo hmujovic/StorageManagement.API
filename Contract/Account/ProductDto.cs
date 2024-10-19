@@ -10,6 +10,7 @@ public class ProductDto
 public class ProductCreateDto
 {
     public string Name { get; set; } = string.Empty;
+    public List<int> ProductCategories { get; set; } = [];
     public decimal Quantity { get; set; }
 }
 
@@ -18,5 +19,5 @@ public class ProductUpdateDto
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public decimal Quantity { get; set; }
-    public List<CategoryDto> Categories { get; set; } = [];
+    public List<int> ProductCategories { get; set; } = [];
 }
