@@ -25,6 +25,8 @@ public class AccountCreateDto
 
     public string? LastName { get; set; }
 
+    public string? Email { get; set; }
+
     public string? PasswordResetToken { get; set; }
 
     public string? EmailConfirmationToken { get; set; }
@@ -42,6 +44,8 @@ public class AccountUpdateDto
 {
     public string Id { get; set; }
     public string FirstName { get; set; } = string.Empty;
+
+    public string? Email { get; set; }
 
     public string? LastName { get; set; }
 
