@@ -1,7 +1,9 @@
 using Domain.Entities;
+using Domain.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +24,8 @@ void ConfigureServices(IServiceCollection services)
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
 
+    services.AddScoped<IRepositoryManager, RepositoryManager>();
     //services.AddScoped<IServiceManager, ServiceManager>();
-    //services.AddScoped<IRepositoryManager, RepositoryManager>();
     //services.AddScoped<ITokenService, TokenService>();
 
     services.AddIdentity<Account, AccountRole>(opt =>
