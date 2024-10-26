@@ -1,13 +1,4 @@
-﻿using Contract;
-using Domain.Entities;
-using Domain.Repositories;
-using Mapster;
-using Microsoft.AspNetCore.Identity;
-using Services.Abstractions;
-using Services.Abstractions.Common;
-using System.IdentityModel.Tokens.Jwt;
-
-namespace Services
+﻿namespace Services
 {
     internal sealed class AccountService(
         IRepositoryManager repositoryManager,
@@ -238,14 +229,30 @@ namespace Services
         {
             try
             {
+                if (accountId != account.Id)
+                {
+                    return new GeneralResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Account Id missmatch."
+                    };
+                }
                 var existingAccount = await userManager.FindByIdAsync(accountId);
+                if (existingAccount == null)
+                {
+                    return new GeneralResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Account not found."
+                    };
+                }
                 var emailExist = await userManager.FindByEmailAsync(account.Email);
                 if (emailExist != null && existingAccount.Email != account.Email)
                 {
                     return new GeneralResponseDto
                     {
                         IsSuccess = false,
-                        Message = "Error in user information.",
+                        Message = "Error in user information."
                     };
                 }
 
