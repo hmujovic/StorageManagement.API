@@ -18,7 +18,7 @@ namespace Presentation.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("delete/{accountId}")]
+        [HttpDelete("{productId}")]
         public async Task<IActionResult> Delete(int productId, CancellationToken cancellationToken)
         {
             await serviceManager.ProductService.Delete(productId, cancellationToken);

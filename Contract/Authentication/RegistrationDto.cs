@@ -19,6 +19,6 @@ public class RegistrationDto
     [Compare(nameof(Password), ErrorMessage = "Passwörter stimmen nicht überein")]
     public string ConfirmPassword { get; set; } = null!;
 
-    public string? PhoneNumber { get; set; } = null!;
+    public string? MobileNumber { get; set; } = null!;
     public string? Role { get; set; }
 }
