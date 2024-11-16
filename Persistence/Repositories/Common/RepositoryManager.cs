@@ -12,12 +12,10 @@ namespace Persistence.Repositories
 
         private readonly Lazy<ICategoryRepository> _lazyCategoryRepository = new(() => new CategoryRepository(dbContext));
 
-        private readonly Lazy<IProductCategoryRepository> _lazyProductCategoryRepository = new(() => new ProductCategoryRepository(dbContext));
 
         public IAccountRepository AccountRepository => _lazyAccountRepository.Value;
         public IUnitOfWork UnitOfWork => _lazyUnitOfWork.Value;
         public IProductRepository ProductRepository => _lazyProductRepository.Value;
         public ICategoryRepository CategoryRepository => _lazyCategoryRepository.Value;
-        public IProductCategoryRepository ProductCategoryRepository => _lazyProductCategoryRepository.Value;
     }
 }

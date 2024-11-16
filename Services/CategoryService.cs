@@ -1,10 +1,4 @@
-﻿using Contract;
-using Domain.Entities;
-using Domain.Repositories;
-using Mapster;
-using Services.Abstractions;
-
-namespace Services
+﻿namespace Services
 {
     public class CategoryService(IRepositoryManager repositoryManager) : ICategoryService
     {
@@ -45,8 +39,8 @@ namespace Services
 
         public async Task<IEnumerable<CategoryDto>> GetAll(CancellationToken cancellationToken = default)
         {
-            var Categorys = await repositoryManager.CategoryRepository.GetAll(cancellationToken);
-            return Categorys.Adapt<IEnumerable<CategoryDto>>();
+            var categories = await repositoryManager.CategoryRepository.GetAll(cancellationToken);
+            return categories.Adapt<IEnumerable<CategoryDto>>();
         }
 
         public async Task<CategoryDto> GetById(int CategoryId, CancellationToken cancellationToken = default)

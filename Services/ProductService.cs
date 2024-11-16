@@ -1,8 +1,4 @@
-﻿using Contract;
-using Domain.Entities;
-using Domain.Repositories;
-using Mapster;
-using Services.Abstractions;
+﻿using Domain.Entities;
 
 namespace Services
 {
@@ -13,6 +9,7 @@ namespace Services
             try
             {
                 var product = productDto.Adapt<Product>();
+                product.Category = null;
                 repositoryManager.ProductRepository.CreateProduct(product);
                 var rowsAffected = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
                 if (rowsAffected != 1)
@@ -24,19 +21,7 @@ namespace Services
                     };
                 }
 
-                foreach (var categoryId in productDto.ProductCategories) 
-                {
-                    var productCategory = new ProductCategory
-                    {
-                        CategoryId = categoryId,
-                        ProductId = product.Id
-                    };
-
-                    repositoryManager.ProductCategoryRepository.Create(productCategory);
-                    await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
-                }
-
-                return new GeneralResponseDto { Message = "Success!" };
+                return new GeneralResponseDto { Data = product.Id, Message = "Success!" };
             }
             catch (Exception ex)
             {
@@ -82,44 +67,13 @@ namespace Services
                     return new GeneralResponseDto { IsSuccess = false, Message = "Product not found." };
 
                 productDto.Adapt(existingProduct);
-
+                existingProduct.Category = null;
                 repositoryManager.ProductRepository.UpdateProduct(existingProduct);
                 var res = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
                 if (res != 1)
                     return new GeneralResponseDto { IsSuccess = false };
 
-                var existingCategories = await repositoryManager.ProductCategoryRepository.GetByProductId(productId);
-                foreach (var categoryId in productDto.ProductCategories)
-                {
-                    var missingCategories = existingCategories
-                    .Where(ec => !productDto.ProductCategories
-                        .Any(pc => pc == ec.Id))
-                    .ToList();
-
-                    foreach (var cat in missingCategories)
-                    {
-                        repositoryManager.ProductCategoryRepository.Delete(cat);
-                        await repositoryManager.UnitOfWork.SaveChangesAsync();
-                    }
-
-                    var category = existingCategories.FirstOrDefault(c => c.CategoryId == categoryId);
-                    if (category == null)
-                    {
-                        var productCategory = new ProductCategory
-                        {
-                            CategoryId = categoryId,
-                            ProductId = existingProduct.Id
-                        };
-                        repositoryManager.ProductCategoryRepository.Create(productCategory);
-                        await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
-                    }
-                    if (category != null)
-                    {
-                        continue;
-                    }
-                }
-
-                return new GeneralResponseDto { Message = "Success!" };
+                return new GeneralResponseDto { Data = existingProduct.Id, Message = "Success!" };
             }
             catch (Exception ex)
             {

@@ -23,7 +23,7 @@ namespace Persistence.Repositories
 
         public async Task<IEnumerable<Product>> GetByCategoryId(int categoryId, CancellationToken cancellationToken = default)
         {
-            return await FindByCondition(p => p.ProductCategories.Any(x => x.CategoryId == categoryId))
+            return await FindByCondition(p => p.CategoryId == categoryId)
                 .ToListAsync(cancellationToken);
         }
     }
