@@ -1,3 +1,7 @@
+global using Contract;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using Services.Abstractions;
 using Domain.Entities;
 using Domain.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,7 +11,6 @@ using Microsoft.IdentityModel.Tokens;
 using Persistence;
 using Persistence.Repositories;
 using Services;
-using Services.Abstractions;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +28,7 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services)
 {
-    services.AddControllers().AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+    services.AddControllers();
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
 
@@ -46,9 +49,10 @@ void ConfigureServices(IServiceCollection services)
 
 void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
 {
+    var serverVersion = new MySqlServerVersion(new Version(8, 0, 26));
     services.AddDbContextPool<DataContext>(options =>
     {
-        options.UseMySQL(configuration.GetConnectionString("MainDB"),
+        options.UseMySql(configuration.GetConnectionString("MainDB"), serverVersion,
             mysqlOptions => { mysqlOptions.EnableRetryOnFailure(1, TimeSpan.FromSeconds(5), null); });
     });
 }

@@ -1,15 +1,9 @@
-﻿using Contract;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Services.Abstractions;
-
-namespace Presentation.Controllers
+﻿namespace StorageManagement.API.Controllers
 {
     [ApiController]
     [Route("api/categories")]
     public class CategoryController(IServiceManager serviceManager) : ControllerBase
     {
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllCategories(CancellationToken cancellationToken)
         {
@@ -17,7 +11,6 @@ namespace Presentation.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{categoryId}")]
         public async Task<IActionResult> Delete(int categoryId, CancellationToken cancellationToken)
         {
@@ -32,7 +25,6 @@ namespace Presentation.Controllers
             return Ok(response);
         }
 
-        [Authorize]
         [HttpGet("details/{categoryId}")]
         public async Task<IActionResult> GetCategoryById(int categoryId, CancellationToken cancellationToken)
         {
@@ -40,7 +32,6 @@ namespace Presentation.Controllers
             return Ok(response);
         }
 
-        [Authorize]
         [HttpPut("update/{categoryId}")]
         public async Task<IActionResult> UpdateCategory(int categoryId, [FromBody] CategoryUpdateDto CategoryDto, CancellationToken cancellationToken)
         {

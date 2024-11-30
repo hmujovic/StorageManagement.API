@@ -1,6 +1,4 @@
-﻿using Contract;
-
-namespace Services.Abstractions;
+﻿namespace Services.Abstractions;
 
 public interface IProductService
 {

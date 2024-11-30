@@ -6,5 +6,7 @@
         IProductRepository ProductRepository { get; }
         ICategoryRepository CategoryRepository { get; }
         IUnitOfWork UnitOfWork { get; }
+        IOrderRepository OrderRepository { get; }
+        IOrderItemRepository OrderItemRepository { get; }
     }
 }
