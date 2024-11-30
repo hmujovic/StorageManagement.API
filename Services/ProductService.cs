@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-
-namespace Services
+﻿namespace Services
 {
     public class ProductService(IRepositoryManager repositoryManager) : IProductService
     {

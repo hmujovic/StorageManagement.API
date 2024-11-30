@@ -1,15 +1,9 @@
-﻿using Contract;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Services.Abstractions;
-
-namespace Presentation.Controllers
+﻿namespace StorageManagement.API.Controllers
 {
     [ApiController]
     [Route("api/products")]
     public class ProductController(IServiceManager serviceManager) : ControllerBase
     {
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllProducts(CancellationToken cancellationToken)
         {
@@ -17,7 +11,6 @@ namespace Presentation.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{productId}")]
         public async Task<IActionResult> Delete(int productId, CancellationToken cancellationToken)
         {
@@ -32,7 +25,6 @@ namespace Presentation.Controllers
             return Ok(response);
         }
 
-        [Authorize]
         [HttpGet("details/{productId}")]
         public async Task<IActionResult> GetProductById(int productId, CancellationToken cancellationToken)
         {
@@ -40,7 +32,6 @@ namespace Presentation.Controllers
             return Ok(response);
         }
 
-        [Authorize]
         [HttpGet("byCategory/{categoryId}")]
         public async Task<IActionResult> GetByCategoryId(int categoryId, CancellationToken cancellationToken)
         {
@@ -48,7 +39,6 @@ namespace Presentation.Controllers
             return Ok(response);
         }
 
-        [Authorize]
         [HttpPut("update/{productId}")]
         public async Task<IActionResult> UpdateProduct(int productId, [FromBody] ProductUpdateDto productDto, CancellationToken cancellationToken)
         {

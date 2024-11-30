@@ -1,9 +1,4 @@
-﻿using Contract;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Services.Abstractions;
-
-namespace Presentation.Controllers
+﻿namespace StorageManagement.API.Controllers
 {
     [ApiController]
     [Route("api/accounts")] //localhost:5000/api/accounts
@@ -15,7 +10,7 @@ namespace Presentation.Controllers
             var response = await serviceManager.AccountService.GetAll(cancellationToken);
             return Ok(response);
         }
-        
+
         [HttpPost("login")] //localhost:5000/api/accounts/login
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto, CancellationToken cancellationToken)
         {

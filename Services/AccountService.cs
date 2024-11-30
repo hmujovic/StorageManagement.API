@@ -6,7 +6,6 @@
         RoleManager<AccountRole> roleManager,
         ITokenService tokenService) : IAccountService
     {
-
         #region Auth
 
         public async Task<GeneralResponseDto> Register(RegistrationDto registrationDto, CancellationToken cancellationToken = default)
